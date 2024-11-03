@@ -1,13 +1,32 @@
 <script setup>
   import { ref, computed } from 'vue'
-  const speakers = ref([])
-
+  
   let speakerId = 0
+
+  const speakers = ref([{
+      id: speakerId++,
+      name: '',
+      score: {
+        speechDevelopment: 0,
+        effectiveness: 0,
+        speechValue: 0,
+        physical: 0,
+        voice: 0,
+        manner: 0,
+        appropriateness: 0,
+        correctness: 0,
+      },
+    }])
 
   /**
    * スピーカー追加
    */
   function addSpeaker() {
+    // 追加できるスピーカーは20名まで
+    if (speakers.value.length >= 20) {
+      return
+    }
+
     speakers.value.push({
       id: speakerId++,
       name: '',
@@ -67,37 +86,39 @@
 </script>
 
 <template>
-  <div>
-    <table class="table-primary table-bordered">
-      <thead>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover custom-table">
+      <thead class="table-primary">
         <tr>
           <th><button @click="addSpeaker()">Add Speaker</button></th>
-          <th v-for="speaker in speakers" :key="speaker.id">
+          <td v-for="speaker in speakers" :key="speaker.id">
             <button @click="deleteSpeaker(speaker.id)">del</button>
-          </th>
+          </td>
         </tr>
         <tr>
           <th>No</th>
-          <th v-for="speaker in speakers" :key="speaker.id">
+          <td v-for="speaker in speakers" :key="speaker.id">
             {{ speaker.id + 1 }}
-          </th>
+          </td>
         </tr>
         <tr>
           <th>Speaker</th>
-          <th v-for="speaker in speakers" :key="speaker.id">
+          <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="text"
+              class="form-control score-input"
               placeholder="Name"
               v-model="speaker.name" />
-          </th>
+          </td>
         </tr>
       </thead>
       <tbody class="table-group-divider">
         <tr>
-          <td>Speech Development</td>
+          <th>Speech Development</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
+              class="form-control score-input"
               min="0"
               max="15"
               placeholder="0 - 15"
@@ -106,10 +127,11 @@
           </td>
         </tr>
         <tr>
-          <td>Effectiveness</td>
+          <th>Effectiveness</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
+              class="form-control score-input"
               min="0"
               max="10"
               placeholder="0 - 10"
@@ -118,10 +140,11 @@
           </td>
         </tr>
         <tr>
-          <td>Speech Value</td>
+          <th>Speech Value</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
+              class="form-control score-input"
               min="0"
               max="25"
               placeholder="0 - 25"
@@ -129,31 +152,34 @@
           </td>
         </tr>
         <tr>
-          <td>Physical</td>
+          <th>Physical</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
+              class="form-control score-input"
               min="0"
               max="10"
-              placeholder="0 - 110"
+              placeholder="0 - 10"
               v-model="speaker.score.physical" />
           </td>
         </tr>
         <tr>
-          <td>Voice</td>
+          <th>Voice</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input type="number"
-            min="0"
-            max="10"
-            placeholder="0 - 10"
-            v-model="speaker.score.voice" />
+              class="form-control score-input"
+              min="0"
+              max="10"
+              placeholder="0 - 10"
+              v-model="speaker.score.voice" />
           </td>
         </tr>
         <tr>
-          <td>Manner</td>
+          <th>Manner</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
+              class="form-control score-input"
               min="0"
               max="10"
               placeholder="0 - 10"
@@ -161,10 +187,11 @@
           </td>
         </tr>
         <tr>
-          <td>Appropriateness</td>
+          <th>Appropriateness</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
+              class="form-control score-input"
               min="0"
               max="10"
               placeholder="0 - 10"
@@ -173,10 +200,11 @@
           </td>
         </tr>
         <tr>
-          <td>Correctness</td>
+          <th>Correctness</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
+              class="form-control score-input"
               min="0"
               max="10"
               placeholder="0 - 10"
@@ -186,7 +214,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td>Total</td>
+          <th>Total</th>
           <td v-for="speaker in totalResults" :key="speaker.id">
             {{ speaker.totalScore }}
           </td>
@@ -196,13 +224,36 @@
   </div>
 </template>
   
-  <style>
-  @media (min-width: 1024px) {
-    .about {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-    }
-  }
-  </style>
+
+<style scoped>
+.table-container {
+  margin: 10px;
+  /* max-width: 1320px; */
+  overflow-x: auto;
+}
+
+.custom-table {
+  background-color: #f8f9fa; /* 背景色を薄いグレーに */
+}
+
+.custom-table th,
+.custom-table td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 12px;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #e9ecef; /* ホバー時に背景色を少し暗く */
+}
+
+.table-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.table-primary th {
+  font-weight: bold;
+}
+</style>
   

@@ -43,17 +43,17 @@
 </script>    
 
 <template>
-    <div>
+    <div class="table-container">
         <!-- 順位表 -->
-        <table border="1">
-            <thead>
+        <table class="table table-bordered table-hover custom-table">
+            <thead class="table-danger">
             <tr>
                 <th>Rank</th>
-                <th>Speaker Name</th>
+                <th>Speaker</th>
                 <th>Total Score</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="table-group-divider">
             <tr v-for="speaker in speakerRanks" :key="speaker.rank">
                 <td>{{ speaker.rank }}</td>
                 <td>{{ speaker.name }}</td>
@@ -63,3 +63,35 @@
         </table>
     </div>
 </template>
+
+<style scoped>
+.table-container {
+  margin: 10px;
+  max-width: 800px;
+  overflow-x: auto;
+}
+
+.custom-table {
+  background-color: #f8f9fa; /* 背景色を薄いグレーに */
+}
+
+.custom-table th,
+.custom-table td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 12px;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #e9ecef; /* ホバー時に背景色を少し暗く */
+}
+
+.table-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.table-primary th {
+  font-weight: bold;
+}
+</style>

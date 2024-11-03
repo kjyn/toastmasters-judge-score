@@ -18,11 +18,15 @@ const totalResults = ref([])
       </nav>
     </div> -->
 
-    <div class="container-md">
-      <ScoreSheet @response="(result) => totalResults = result" />
-    </div>
-    <div class="container-md">
-      <RankTable :totalResults="totalResults"/>
+    <div class="container text-center">
+      <div class="row">
+          <div class="col-md-8">
+            <ScoreSheet @response="(result) => totalResults = result" />
+          </div>
+          <div class="col-md-4">
+            <RankTable :totalResults="totalResults"/>
+          </div>
+      </div>
     </div>
   </header>
 
