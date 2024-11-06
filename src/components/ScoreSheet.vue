@@ -48,6 +48,11 @@
    * @param {number} id スピーカーID
    */
   function deleteSpeaker(id) {
+    let confirmResult = confirm(`${ String(id + 1) }: ${ speakers.value[id].name }を削除します。よろしいですか？`)
+    if (confirmResult === false) {
+      return
+    }
+
     // 削除
     speakers.value.splice(id, 1)
 
@@ -87,22 +92,26 @@
 
 <template>
   <div class="table-responsive">
-    <table class="table table-bordered table-hover custom-table">
+    <table class="table table-bordered table-sm">
       <thead class="table-primary">
-        <tr>
-          <th><button @click="addSpeaker()">Add Speaker</button></th>
+        <tr class="fixed-header">
+          <th class="fixed-first-column">
+            <button class="btn btn-success" @click="addSpeaker()">Add Speaker</button>
+          </th>
           <td v-for="speaker in speakers" :key="speaker.id">
-            <button @click="deleteSpeaker(speaker.id)">del</button>
+            <button class="delete-button" @click="deleteSpeaker(speaker.id)">
+              <img src="./icons/delete.png" alt="Delete This Speaker">
+            </button>
           </td>
         </tr>
-        <tr>
-          <th>No</th>
+        <tr class="fixed-header">
+          <th class="fixed-first-column">No</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             {{ speaker.id + 1 }}
           </td>
         </tr>
-        <tr>
-          <th>Speaker</th>
+        <tr class="fixed-header">
+          <th class="fixed-first-column">Speaker</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="text"
@@ -114,7 +123,7 @@
       </thead>
       <tbody class="table-group-divider">
         <tr>
-          <th>Speech Development</th>
+          <th class="fixed-first-column">Speech Development</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -127,7 +136,7 @@
           </td>
         </tr>
         <tr>
-          <th>Effectiveness</th>
+          <th class="fixed-first-column">Effectiveness</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -140,7 +149,7 @@
           </td>
         </tr>
         <tr>
-          <th>Speech Value</th>
+          <th class="fixed-first-column">Speech Value</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -152,7 +161,7 @@
           </td>
         </tr>
         <tr>
-          <th>Physical</th>
+          <th class="fixed-first-column">Physical</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -164,7 +173,7 @@
           </td>
         </tr>
         <tr>
-          <th>Voice</th>
+          <th class="fixed-first-column">Voice</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input type="number"
               class="form-control score-input"
@@ -175,7 +184,7 @@
           </td>
         </tr>
         <tr>
-          <th>Manner</th>
+          <th class="fixed-first-column">Manner</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -187,7 +196,7 @@
           </td>
         </tr>
         <tr>
-          <th>Appropriateness</th>
+          <th class="fixed-first-column">Appropriateness</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -200,7 +209,7 @@
           </td>
         </tr>
         <tr>
-          <th>Correctness</th>
+          <th class="fixed-first-column">Correctness</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -212,9 +221,9 @@
           </td>
         </tr>
       </tbody>
-      <tfoot>
+      <tfoot class="table-primary table-group-divider">
         <tr>
-          <th>Total</th>
+          <th class="fixed-first-column">Total</th>
           <td v-for="speaker in totalResults" :key="speaker.id">
             {{ speaker.totalScore }}
           </td>
@@ -230,11 +239,21 @@
   margin: 10px;
   /* max-width: 1320px; */
   overflow-x: auto;
+  position: relative;
 }
 
-.custom-table {
-  background-color: #f8f9fa; /* 背景色を薄いグレーに */
+.fixed-header {
+    position: sticky;
+    top: 0;
+    z-index: 10; /* ヘッダーを他の要素の上に表示 */
 }
+
+.fixed-first-column {
+    position: sticky;
+    left: 0;
+    z-index: 5; /* 列ヘッダーを他の要素の上に表示 */
+}
+
 
 .custom-table th,
 .custom-table td {
@@ -255,5 +274,27 @@
 .table-primary th {
   font-weight: bold;
 }
+
+.delete-button {
+  background: none; /* 背景を透明に */
+  border: none; /* ボーダーを消す */
+  cursor: pointer; /* ポインターにする */
+  padding: 0; /* パディングをなくす */
+}
+
+@media (min-width: 1024px) {
+  .delete-button img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .delete-button img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
 </style>
   

@@ -45,7 +45,7 @@
 <template>
     <div class="table-container">
         <!-- 順位表 -->
-        <table class="table table-bordered table-hover custom-table">
+        <table class="table table-bordered table-sm custom-table">
             <thead class="table-danger">
             <tr>
                 <th>Rank</th>
