@@ -94,8 +94,8 @@
   <div class="table-responsive">
     <table class="table table-bordered table-sm">
       <thead class="table-primary">
-        <tr class="fixed-header">
-          <th class="fixed-first-column">
+        <tr class="fixed-row">
+          <th class="fixed-column">
             <button class="btn btn-success" @click="addSpeaker()">Add Speaker</button>
           </th>
           <td v-for="speaker in speakers" :key="speaker.id">
@@ -104,14 +104,14 @@
             </button>
           </td>
         </tr>
-        <tr class="fixed-header">
-          <th class="fixed-first-column">No</th>
+        <tr class="fixed-row">
+          <th class="fixed-column">No</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             {{ speaker.id + 1 }}
           </td>
         </tr>
-        <tr class="fixed-header">
-          <th class="fixed-first-column">Speaker</th>
+        <tr class="fixed-row">
+          <th class="fixed-column">Speaker</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="text"
@@ -123,7 +123,7 @@
       </thead>
       <tbody class="table-group-divider">
         <tr>
-          <th class="fixed-first-column">Speech Development</th>
+          <th class="fixed-column">Speech Development</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -136,7 +136,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-first-column">Effectiveness</th>
+          <th class="fixed-column">Effectiveness</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -149,7 +149,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-first-column">Speech Value</th>
+          <th class="fixed-column">Speech Value</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -161,7 +161,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-first-column">Physical</th>
+          <th class="fixed-column">Physical</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -173,7 +173,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-first-column">Voice</th>
+          <th class="fixed-column">Voice</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input type="number"
               class="form-control score-input"
@@ -184,7 +184,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-first-column">Manner</th>
+          <th class="fixed-column">Manner</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -196,7 +196,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-first-column">Appropriateness</th>
+          <th class="fixed-column">Appropriateness</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -209,7 +209,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-first-column">Correctness</th>
+          <th class="fixed-column">Correctness</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -223,7 +223,7 @@
       </tbody>
       <tfoot class="table-primary table-group-divider">
         <tr>
-          <th class="fixed-first-column">Total</th>
+          <th class="fixed-column">Total</th>
           <td v-for="speaker in totalResults" :key="speaker.id">
             {{ speaker.totalScore }}
           </td>
@@ -240,29 +240,32 @@
   /* max-width: 1320px; */
   overflow-x: auto;
   position: relative;
+  white-space: nowrap;
 }
 
-.fixed-header {
+.fixed-row {
     position: sticky;
     top: 0;
     z-index: 10; /* ヘッダーを他の要素の上に表示 */
 }
 
-.fixed-first-column {
+.fixed-column {
     position: sticky;
     left: 0;
     z-index: 5; /* 列ヘッダーを他の要素の上に表示 */
+    min-width: 120px;
 }
 
 
-.custom-table th,
-.custom-table td {
+table th,
+table td {
   text-align: center;
   vertical-align: middle;
   padding: 12px;
+  min-width: 100px;
 }
 
-.custom-table tbody tr:hover {
+tbody tr:hover {
   background-color: #e9ecef; /* ホバー時に背景色を少し暗く */
 }
 
