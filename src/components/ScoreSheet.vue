@@ -1,22 +1,10 @@
 <script setup>
+  import { InternationalCriteria } from '../utils/internationalCriteria.js'
   import { ref, computed } from 'vue'
   
-  let speakerId = 0
+  let speakerId = 0;
 
-  const speakers = ref([{
-      id: speakerId++,
-      name: '',
-      score: {
-        speechDevelopment: 0,
-        effectiveness: 0,
-        speechValue: 0,
-        physical: 0,
-        voice: 0,
-        manner: 0,
-        appropriateness: 0,
-        correctness: 0,
-      },
-    }])
+  const speakers = ref([(new InternationalCriteria(speakerId, ''))]);
 
   /**
    * スピーカー追加
@@ -27,20 +15,7 @@
       return
     }
 
-    speakers.value.push({
-      id: speakerId++,
-      name: '',
-      score: {
-        speechDevelopment: 0,
-        effectiveness: 0,
-        speechValue: 0,
-        physical: 0,
-        voice: 0,
-        manner: 0,
-        appropriateness: 0,
-        correctness: 0,
-      },
-    })
+    speakers.value.push(new InternationalCriteria(speakerId++, ''));
   }
 
   /**
@@ -100,7 +75,7 @@
           </th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <button class="delete-button" @click="deleteSpeaker(speaker.id)">
-              <img src="./icons/delete.png" alt="Delete This Speaker">
+              <img src="../assets/icons/delete.png" alt="Delete This Speaker">
             </button>
           </td>
         </tr>

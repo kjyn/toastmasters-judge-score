@@ -1,6 +1,6 @@
 <script setup>
 // import { RouterLink, RouterView } from 'vue-router'
-import PageTitle from './components/PaageTitle.vue'
+import PageTitle from './components/PageTitle.vue'
 import ScoreSheet from './components/ScoreSheet.vue'
 import RankTable from './components/RankTable.vue'
 import { ref } from 'vue'
