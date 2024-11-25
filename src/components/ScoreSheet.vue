@@ -23,7 +23,11 @@
    * @param {number} id スピーカーID
    */
   function deleteSpeaker(id) {
-    let confirmResult = confirm(`${ String(id + 1) }: ${ speakers.value[id].name }を削除します。よろしいですか？`)
+    if (speakers.value.length <= 1) {
+      return
+    }
+
+    let confirmResult = confirm(`${ String(id + 1) }: ${ speakers.value[id].speakerName }を削除します。よろしいですか？`)
     if (confirmResult === false) {
       return
     }
@@ -44,15 +48,10 @@
   const totalResults = computed(() => {
     const totalResult = []
     speakers.value.forEach(speaker => {
-      let totalScore = 0
-      for (let criterion in speaker.score) {
-        totalScore += Number(speaker.score[criterion])
-      }
-
       totalResult.push({
         id: speaker.id,
         name: speaker.name,
-        totalScore: totalScore,
+        totalScore: speaker.totalScore,
       })
     })
 
@@ -92,114 +91,28 @@
               type="text"
               class="form-control score-input"
               placeholder="Name"
-              v-model="speaker.name" />
+              v-model="speaker.speakerName" />
           </td>
         </tr>
       </thead>
       <tbody class="table-group-divider">
-        <tr>
-          <th class="fixed-column">Speech Development</th>
+        <tr v-for="criteria in speakers[0].scoreList" :key="criteria.no">
+          <th class="fixed-column">{{ criteria.name}}</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
               class="form-control score-input"
-              min="0"
-              max="15"
-              placeholder="0 - 15"
-              v-model="speaker.score.speechDevelopment"
+              v-bind:min="criteria.min"
+              v-bind:max="criteria.max"
+              v-model="speaker.scoreList[criteria.no].point"
             />
-          </td>
-        </tr>
-        <tr>
-          <th class="fixed-column">Effectiveness</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
-            <input
-              type="number"
-              class="form-control score-input"
-              min="0"
-              max="10"
-              placeholder="0 - 10"
-              v-model="speaker.score.effectiveness"
-            />
-          </td>
-        </tr>
-        <tr>
-          <th class="fixed-column">Speech Value</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
-            <input
-              type="number"
-              class="form-control score-input"
-              min="0"
-              max="25"
-              placeholder="0 - 25"
-              v-model="speaker.score.speechValue" />
-          </td>
-        </tr>
-        <tr>
-          <th class="fixed-column">Physical</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
-            <input
-              type="number"
-              class="form-control score-input"
-              min="0"
-              max="10"
-              placeholder="0 - 10"
-              v-model="speaker.score.physical" />
-          </td>
-        </tr>
-        <tr>
-          <th class="fixed-column">Voice</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
-            <input type="number"
-              class="form-control score-input"
-              min="0"
-              max="10"
-              placeholder="0 - 10"
-              v-model="speaker.score.voice" />
-          </td>
-        </tr>
-        <tr>
-          <th class="fixed-column">Manner</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
-            <input
-              type="number"
-              class="form-control score-input"
-              min="0"
-              max="10"
-              placeholder="0 - 10"
-              v-model="speaker.score.manner" />
-          </td>
-        </tr>
-        <tr>
-          <th class="fixed-column">Appropriateness</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
-            <input
-              type="number"
-              class="form-control score-input"
-              min="0"
-              max="10"
-              placeholder="0 - 10"
-              v-model="speaker.score.appropriateness"
-            />
-          </td>
-        </tr>
-        <tr>
-          <th class="fixed-column">Correctness</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
-            <input
-              type="number"
-              class="form-control score-input"
-              min="0"
-              max="10"
-              placeholder="0 - 10"
-              v-model="speaker.score.correctness" />
           </td>
         </tr>
       </tbody>
       <tfoot class="table-primary table-group-divider">
         <tr>
           <th class="fixed-column">Total</th>
-          <td v-for="speaker in totalResults" :key="speaker.id">
+          <td v-for="speaker in speakers" :key="speaker.id">
             {{ speaker.totalScore }}
           </td>
         </tr>

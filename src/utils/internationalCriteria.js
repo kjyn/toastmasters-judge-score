@@ -4,22 +4,22 @@ export class InternationalCriteria {
 
     // プライベートフィールドの定義
     #id = 0;
-    #speaker = '';
+    #speakerName = '';
     #scoreList = [];
 
     // コンストラクタ
-    constructor(id, speaker) {
+    constructor(id, speakerName) {
         this.#id = id;
-        this.#speaker = speaker;
+        this.#speakerName = speakerName;
 
-        this.#scoreList.push(new CriteriaItem(1, 'Speech Development', 0, 15));
-        this.#scoreList.push(new CriteriaItem(2, 'Effectiveness', 0, 10));
-        this.#scoreList.push(new CriteriaItem(3, 'Speech Value', 0, 25));
-        this.#scoreList.push(new CriteriaItem(4, 'Physical', 0, 10));
-        this.#scoreList.push(new CriteriaItem(5, 'Voice', 0, 10));
-        this.#scoreList.push(new CriteriaItem(6, 'Manner', 0, 10));
-        this.#scoreList.push(new CriteriaItem(7, 'Appropriateness', 0, 10));
-        this.#scoreList.push(new CriteriaItem(8, 'Correctness', 0, 10));
+        this.#scoreList.push(new CriteriaItem(0, 'Speech Development', 0, 15));
+        this.#scoreList.push(new CriteriaItem(1, 'Effectiveness', 0, 10));
+        this.#scoreList.push(new CriteriaItem(2, 'Speech Value', 0, 25));
+        this.#scoreList.push(new CriteriaItem(3, 'Physical', 0, 10));
+        this.#scoreList.push(new CriteriaItem(4, 'Voice', 0, 10));
+        this.#scoreList.push(new CriteriaItem(5, 'Manner', 0, 10));
+        this.#scoreList.push(new CriteriaItem(6, 'Appropriateness', 0, 10));
+        this.#scoreList.push(new CriteriaItem(7, 'Correctness', 0, 10));
     }
 
     // GetterとSetterの定義
@@ -28,23 +28,27 @@ export class InternationalCriteria {
     }
 
     set id(value) {
-        if (typeof value === 'number' && value > 0) {
+        if (typeof value === 'number' && value >= 0) {
             this.#id = value;
         } else {
             throw new Error('ID must be a positive number');
         }
     }
 
-    get speaker() {
-        return this.#speaker;
+    get speakerName() {
+        return this.#speakerName;
     }
 
-    set speaker(value) {
+    set speakerName(value) {
         if (typeof value === 'string' && value.trim().length > 0) {
-            this.#speaker = value;
+            this.#speakerName = value;
         } else {
-            throw new Error('Speaker name must be a non-empty string');
+            throw new Error('Speaker Name must be a non-empty string');
         }
+    }
+
+    get scoreList() {
+        return this.#scoreList;
     }
 
     // 合計スコアを計算するメソッド
