@@ -15,7 +15,8 @@
       return
     }
 
-    speakers.value.push(new InternationalCriteria(speakerId++, ''));
+    speakerId += 1;
+    speakers.value.push(new InternationalCriteria(speakerId, ''));
     saveSpeakers();
   }
 
@@ -83,6 +84,7 @@
       speakerId = parsedSpeakers.length;
       return parsedSpeakers.map(speaker => new InternationalCriteria(speaker.id, speaker.name, speaker.score));
     }
+    speakerId = 0;
     return [new InternationalCriteria(speakerId, '')];
   }
 
@@ -321,6 +323,10 @@ tbody tr:hover {
 
 .name-input {
   text-align: left;
+}
+
+tfoot td {
+  text-align: right;
 }
 
 @media (min-width: 1024px) {
