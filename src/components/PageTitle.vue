@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid text-center">
-        <h3>Score Sheet</h3>
-        <h6>For Judging The Toastmasters Interntional Contest</h6>
+        <h3>Speech Score Sheet</h3>
+        <h6>For The Toastmasters International Speech Contest</h6>
     </div>
 </template>
 

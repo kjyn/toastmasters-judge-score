@@ -2,11 +2,10 @@
     import { computed } from 'vue'
     
     const props = defineProps({
-        totalResults: [{
-            id: Number,
-            name: String,
-            totalScore: Number
-        }]
+        totalResults: {
+            type: Array,
+            default: () => []
+        }
     });
  
     /**
@@ -109,5 +108,10 @@
 
 .table-primary th {
   font-weight: bold;
+}
+
+.footer {
+  margin: 10px;
+  text-align: center;
 }
 </style>

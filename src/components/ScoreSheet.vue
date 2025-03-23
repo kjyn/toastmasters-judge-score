@@ -1,8 +1,8 @@
 <script setup>
   import { InternationalCriteria } from '../utils/internationalCriteria.js'
-  import { ref, computed, watch } from 'vue'
+  import { ref, computed, watch, nextTick } from 'vue'
   
-  let speakerId = 0;
+//   let speakerId = 0;
 
   const speakers = ref(loadSpeakers());
 
@@ -15,9 +15,17 @@
       return
     }
 
-    speakerId += 1;
+    const speakerId = speakers.value.length;
     speakers.value.push(new InternationalCriteria(speakerId, ''));
     saveSpeakers();
+
+    // スピーカー追加後にスクロールを最右端に移動
+    nextTick(() => {
+      const tableResponsive = document.querySelector('.table-responsive');
+      if (tableResponsive) {
+        tableResponsive.scrollLeft = tableResponsive.scrollWidth;
+      }
+    });
   }
 
   /**
@@ -25,6 +33,12 @@
    * @param {number} id スピーカーID
    */
   function deleteSpeaker(id) {
+    // スピーカーが1名の場合は削除不可
+    if(speakers.value.length <= 1) {
+      return
+    }
+
+    // 確認ダイアログ
     let confirmResult = confirm(`${ String(id + 1) }: ${ speakers.value[id].name }を削除します。よろしいですか？`)
     if (confirmResult === false) {
         return
@@ -34,7 +48,7 @@
     speakers.value.splice(id, 1)
 
     // IDの振り直し
-    speakerId = 0
+    let speakerId = 0;
     speakers.value.forEach(speaker => {
         speaker.id = speakerId++
     })
@@ -79,12 +93,12 @@
    */
   function loadSpeakers() {
     const savedSpeakers = localStorage.getItem('speakers');
+    let speakerId = 0;
     if (savedSpeakers) {
       const parsedSpeakers = JSON.parse(savedSpeakers);
       speakerId = parsedSpeakers.length;
       return parsedSpeakers.map(speaker => new InternationalCriteria(speaker.id, speaker.name, speaker.score));
     }
-    speakerId = 0;
     return [new InternationalCriteria(speakerId, '')];
   }
 
@@ -105,7 +119,7 @@
 
 <template>
   <div class="table-responsive">
-    <table class="table table-bordered table-sm">
+    <table class="table table-bordered table-sm" id="score-table">
       <thead class="table-primary">
         <tr class="fixed-row">
           <th class="fixed-column">
@@ -124,19 +138,19 @@
           </td>
         </tr>
         <tr class="fixed-row">
-          <th class="fixed-column">Speaker</th>
+          <th class="fixed-column">Name</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="text"
               class="form-control name-input"
-              placeholder="Name"
+              placeholder=""
               v-model="speaker.name" />
           </td>
         </tr>
       </thead>
       <tbody class="table-group-divider">
         <tr>
-          <th class="fixed-column">Speech Development</th>
+          <th class="fixed-column">Speech Development (15)</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -151,7 +165,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-column">Effectiveness</th>
+          <th class="fixed-column">Effectiveness (10)</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -166,7 +180,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-column">Speech Value</th>
+          <th class="fixed-column">Speech Value (25)</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -181,7 +195,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-column">Physical</th>
+          <th class="fixed-column">Physical (10)</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -196,7 +210,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-column">Voice</th>
+          <th class="fixed-column">Voice (10)</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input type="number"
               class="form-control score-input"
@@ -210,7 +224,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-column">Manner</th>
+          <th class="fixed-column">Manner (10)</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -225,7 +239,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-column">Appropriateness</th>
+          <th class="fixed-column">Appropriateness (10)</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
@@ -240,7 +254,7 @@
           </td>
         </tr>
         <tr>
-          <th class="fixed-column">Correctness</th>
+          <th class="fixed-column">Correctness (10)</th>
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="number"
