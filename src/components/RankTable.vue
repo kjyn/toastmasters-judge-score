@@ -40,6 +40,19 @@
 
         return result
     })
+
+    /**
+     * リセット
+     */
+    const resetAll = () => {
+        let confirmResult = confirm(`入力内容をすべて削除します。よろしいですか？`)
+        if (confirmResult === false) {
+            return
+        }
+
+        localStorage.clear();
+        location.reload();
+    }
 </script>    
 
 <template>
@@ -61,6 +74,9 @@
             </tr>
             </tbody>
         </table>
+    </div>
+    <div class="footer">
+        <button class="btn btn-danger" @click="resetAll">Reset All</button>
     </div>
 </template>
 

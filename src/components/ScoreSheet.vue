@@ -1,10 +1,10 @@
 <script setup>
   import { InternationalCriteria } from '../utils/internationalCriteria.js'
-  import { ref, computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
   
   let speakerId = 0;
 
-  const speakers = ref([(new InternationalCriteria(speakerId, ''))]);
+  const speakers = ref(loadSpeakers());
 
   /**
    * スピーカー追加
@@ -16,6 +16,7 @@
     }
 
     speakers.value.push(new InternationalCriteria(speakerId++, ''));
+    saveSpeakers();
   }
 
   /**
@@ -25,7 +26,7 @@
   function deleteSpeaker(id) {
     let confirmResult = confirm(`${ String(id + 1) }: ${ speakers.value[id].name }を削除します。よろしいですか？`)
     if (confirmResult === false) {
-      return
+        return
     }
 
     // 削除
@@ -34,8 +35,10 @@
     // IDの振り直し
     speakerId = 0
     speakers.value.forEach(speaker => {
-      speaker.id = speakerId++
+        speaker.id = speakerId++
     })
+
+    saveSpeakers();
   }
 
   /**
@@ -63,6 +66,39 @@
   const emit = defineEmits(['response'])
   emit('response', totalResults)
 
+  /**
+   * スピーカー情報を保存
+   */
+   function saveSpeakers() {
+    localStorage.setItem('speakers', JSON.stringify(speakers.value));
+  }
+
+  /**
+   * スピーカー情報を読み込み
+   */
+  function loadSpeakers() {
+    const savedSpeakers = localStorage.getItem('speakers');
+    if (savedSpeakers) {
+      const parsedSpeakers = JSON.parse(savedSpeakers);
+      speakerId = parsedSpeakers.length;
+      return parsedSpeakers.map(speaker => new InternationalCriteria(speaker.id, speaker.name, speaker.score));
+    }
+    return [new InternationalCriteria(speakerId, '')];
+  }
+
+  // スピーカー情報が変更されたときに保存
+  watch(speakers, saveSpeakers, { deep: true });
+
+    /**
+   * スコアの範囲をチェック
+   */
+   function checkScoreRange(speaker, criterion, min, max) {
+    if (speaker.score[criterion] < min) {
+      speaker.score[criterion] = min;
+    } else if (speaker.score[criterion] > max) {
+      speaker.score[criterion] = max;
+    }
+  }
 </script>
 
 <template>
@@ -90,7 +126,7 @@
           <td v-for="speaker in speakers" :key="speaker.id">
             <input
               type="text"
-              class="form-control score-input"
+              class="form-control name-input"
               placeholder="Name"
               v-model="speaker.name" />
           </td>
@@ -106,7 +142,9 @@
               min="0"
               max="15"
               placeholder="0 - 15"
+              onfocus="this.select();"
               v-model="speaker.score.speechDevelopment"
+              @blur="checkScoreRange(speaker, 'speechDevelopment', 0, 15)"
             />
           </td>
         </tr>
@@ -119,7 +157,9 @@
               min="0"
               max="10"
               placeholder="0 - 10"
+              onfocus="this.select();"
               v-model="speaker.score.effectiveness"
+              @blur="checkScoreRange(speaker, 'effectiveness', 0, 10)"
             />
           </td>
         </tr>
@@ -132,7 +172,10 @@
               min="0"
               max="25"
               placeholder="0 - 25"
-              v-model="speaker.score.speechValue" />
+              onfocus="this.select();"
+              v-model="speaker.score.speechValue"
+              @blur="checkScoreRange(speaker, 'speechValue', 0, 25)"
+            />
           </td>
         </tr>
         <tr>
@@ -144,7 +187,10 @@
               min="0"
               max="10"
               placeholder="0 - 10"
-              v-model="speaker.score.physical" />
+              onfocus="this.select();"
+              v-model="speaker.score.physical"
+              @blur="checkScoreRange(speaker, 'physical', 0, 10)"
+            />
           </td>
         </tr>
         <tr>
@@ -155,7 +201,10 @@
               min="0"
               max="10"
               placeholder="0 - 10"
-              v-model="speaker.score.voice" />
+              onfocus="this.select();"
+              v-model="speaker.score.voice"
+              @blur="checkScoreRange(speaker, 'voice', 0, 10)"
+            />
           </td>
         </tr>
         <tr>
@@ -167,7 +216,10 @@
               min="0"
               max="10"
               placeholder="0 - 10"
-              v-model="speaker.score.manner" />
+              onfocus="this.select();"
+              v-model="speaker.score.manner"
+              @blur="checkScoreRange(speaker, 'manner', 0, 10)"
+            />
           </td>
         </tr>
         <tr>
@@ -179,7 +231,9 @@
               min="0"
               max="10"
               placeholder="0 - 10"
+              onfocus="this.select();"
               v-model="speaker.score.appropriateness"
+              @blur="checkScoreRange(speaker, 'appropriateness', 0, 10)"
             />
           </td>
         </tr>
@@ -192,7 +246,10 @@
               min="0"
               max="10"
               placeholder="0 - 10"
-              v-model="speaker.score.correctness" />
+              onfocus="this.select();"
+              v-model="speaker.score.correctness"
+              @blur="checkScoreRange(speaker, 'correctness', 0, 10)"
+            />
           </td>
         </tr>
       </tbody>
@@ -236,8 +293,6 @@ table th,
 table td {
   text-align: center;
   vertical-align: middle;
-  padding: 12px;
-  min-width: 100px;
 }
 
 tbody tr:hover {
@@ -260,10 +315,24 @@ tbody tr:hover {
   padding: 0; /* パディングをなくす */
 }
 
+.score-input {
+  text-align: right;
+}
+
+.name-input {
+  text-align: left;
+}
+
 @media (min-width: 1024px) {
   .delete-button img {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  table th,
+  table td {
+    padding: 12px;
+    min-width: 160px;
   }
 }
 
@@ -271,6 +340,12 @@ tbody tr:hover {
   .delete-button img {
     width: 24px;
     height: 24px;
+  }
+
+  table th,
+  table td {
+    padding: 5px;
+    min-width: 100px;
   }
 }
 
