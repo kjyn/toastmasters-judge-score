@@ -14,6 +14,10 @@ export class InternationalCriteria {
         };
     }
 
+    get scoreList() {
+        return this.#scoreList;
+    }
+
     // 合計スコアを計算するメソッド
     get totalScore() {
         let total = 0;

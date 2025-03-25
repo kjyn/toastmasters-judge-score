@@ -62,15 +62,10 @@
   const totalResults = computed(() => {
     const totalResult = []
     speakers.value.forEach(speaker => {
-      let totalScore = 0
-      for (let criterion in speaker.score) {
-        totalScore += Number(speaker.score[criterion])
-      }
-
       totalResult.push({
         id: speaker.id,
         name: speaker.name,
-        totalScore: totalScore,
+        totalScore: speaker.totalScore,
       })
     })
 
@@ -272,7 +267,7 @@
       <tfoot class="table-primary table-group-divider">
         <tr>
           <th class="fixed-column">Total</th>
-          <td v-for="speaker in totalResults" :key="speaker.id">
+          <td v-for="speaker in speakers" :key="speaker.id">
             {{ speaker.totalScore }}
           </td>
         </tr>
