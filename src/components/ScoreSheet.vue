@@ -103,11 +103,36 @@
     /**
    * スコアの範囲をチェック
    */
-   function checkScoreRange(speaker, criterion, min, max) {
+  function checkScoreRange(speaker, criterion, min, max) {
     if (speaker.score[criterion] < min) {
       speaker.score[criterion] = min;
     } else if (speaker.score[criterion] > max) {
       speaker.score[criterion] = max;
+    }
+  }
+
+  /**
+   * フォーカスを次の行の同じ列に移動
+   */
+  function moveFocusDown(event, speakerIndex, criterion) {
+    // EnterキーまたはTabキー以外のキーが押された場合は何もしない
+    if (event.key !== 'Enter' && event.key !== 'Tab') {
+      return;
+    }
+
+    event.preventDefault();
+
+    // スコア項目のキーを配列として取得
+    const keys = Object.keys(speakers.value[speakerIndex].score);
+
+    // 現在の項目のインデックスを取得
+    const currentIndex = keys.indexOf(criterion);
+
+    // 次の項目を取得（最後の項目の場合は同じ項目に留まる）
+    const nextCriterion = keys[currentIndex + 1] || criterion;
+    const nextInput = document.querySelector(`#input-${speakerIndex}-${nextCriterion}`);
+    if (nextInput) {
+      nextInput.focus();
     }
   }
 </script>
@@ -134,19 +159,22 @@
         </tr>
         <tr class="fixed-row">
           <th class="fixed-column">Name</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
+          <td v-for="(speaker, index) in speakers" :key="speaker.id">
             <input
               type="text"
               class="form-control name-input"
               placeholder=""
-              v-model="speaker.name" />
+              v-model="speaker.name"
+              @keydown="moveFocusDown($event, index, 'name')"
+              @touchstart="moveFocusDown($event, index, 'name')"
+              :id="`input-${index}-name`"/>
           </td>
         </tr>
       </thead>
       <tbody class="table-group-divider">
         <tr>
           <th class="fixed-column">Speech Development (15)</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
+          <td v-for="(speaker, index) in speakers" :key="speaker.id">
             <input
               type="number"
               class="form-control score-input"
@@ -156,12 +184,15 @@
               onfocus="this.select();"
               v-model="speaker.score.speechDevelopment"
               @blur="checkScoreRange(speaker, 'speechDevelopment', 0, 15)"
+              @keydown="moveFocusDown($event, index, 'speechDevelopment')"
+              @touchstart="moveFocusDown($event, index, 'speechDevelopment')"
+              :id="`input-${index}-speechDevelopment`"
             />
           </td>
         </tr>
         <tr>
           <th class="fixed-column">Effectiveness (10)</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
+          <td v-for="(speaker, index) in speakers" :key="speaker.id">
             <input
               type="number"
               class="form-control score-input"
@@ -171,12 +202,15 @@
               onfocus="this.select();"
               v-model="speaker.score.effectiveness"
               @blur="checkScoreRange(speaker, 'effectiveness', 0, 10)"
+              @keydown="moveFocusDown($event, index, 'effectiveness')"
+              @touchstart="moveFocusDown($event, index, 'effectiveness')"
+              :id="`input-${index}-effectiveness`"
             />
           </td>
         </tr>
         <tr>
           <th class="fixed-column">Speech Value (25)</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
+          <td v-for="(speaker, index) in speakers" :key="speaker.id">
             <input
               type="number"
               class="form-control score-input"
@@ -186,12 +220,15 @@
               onfocus="this.select();"
               v-model="speaker.score.speechValue"
               @blur="checkScoreRange(speaker, 'speechValue', 0, 25)"
+              @keydown="moveFocusDown($event, index, 'speechValue')"
+              @touchstart="moveFocusDown($event, index, 'speechValue')"
+              :id="`input-${index}-speechValue`"
             />
           </td>
         </tr>
         <tr>
           <th class="fixed-column">Physical (10)</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
+          <td v-for="(speaker, index) in speakers" :key="speaker.id">
             <input
               type="number"
               class="form-control score-input"
@@ -201,12 +238,15 @@
               onfocus="this.select();"
               v-model="speaker.score.physical"
               @blur="checkScoreRange(speaker, 'physical', 0, 10)"
+              @keydown="moveFocusDown($event, index, 'physical')"
+              @touchstart="moveFocusDown($event, index, 'physical')"
+              :id="`input-${index}-physical`"
             />
           </td>
         </tr>
         <tr>
           <th class="fixed-column">Voice (10)</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
+          <td v-for="(speaker, index) in speakers" :key="speaker.id">
             <input type="number"
               class="form-control score-input"
               min="0"
@@ -215,12 +255,15 @@
               onfocus="this.select();"
               v-model="speaker.score.voice"
               @blur="checkScoreRange(speaker, 'voice', 0, 10)"
+              @keydown="moveFocusDown($event, index, 'voice')"
+              @touchstart="moveFocusDown($event, index, 'voice')"
+              :id="`input-${index}-voice`"
             />
           </td>
         </tr>
         <tr>
           <th class="fixed-column">Manner (10)</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
+          <td v-for="(speaker, index) in speakers" :key="speaker.id">
             <input
               type="number"
               class="form-control score-input"
@@ -230,12 +273,15 @@
               onfocus="this.select();"
               v-model="speaker.score.manner"
               @blur="checkScoreRange(speaker, 'manner', 0, 10)"
+              @keydown="moveFocusDown($event, index, 'manner')"
+              @touchstart="moveFocusDown($event, index, 'manner')"
+              :id="`input-${index}-manner`"
             />
           </td>
         </tr>
         <tr>
           <th class="fixed-column">Appropriateness (10)</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
+          <td v-for="(speaker, index) in speakers" :key="speaker.id">
             <input
               type="number"
               class="form-control score-input"
@@ -245,12 +291,15 @@
               onfocus="this.select();"
               v-model="speaker.score.appropriateness"
               @blur="checkScoreRange(speaker, 'appropriateness', 0, 10)"
+              @keydown="moveFocusDown($event, index, 'appropriateness')"
+              @touchstart="moveFocusDown($event, index, 'appropriateness')"
+              :id="`input-${index}-appropriateness`"
             />
           </td>
         </tr>
         <tr>
           <th class="fixed-column">Correctness (10)</th>
-          <td v-for="speaker in speakers" :key="speaker.id">
+          <td v-for="(speaker, index) in speakers" :key="speaker.id">
             <input
               type="number"
               class="form-control score-input"
@@ -260,6 +309,9 @@
               onfocus="this.select();"
               v-model="speaker.score.correctness"
               @blur="checkScoreRange(speaker, 'correctness', 0, 10)"
+              @keydown="moveFocusDown($event, index, 'correctness')"
+              @touchstart="moveFocusDown($event, index, 'correctness')"
+              :id="`input-${index}-correctness`"
             />
           </td>
         </tr>
